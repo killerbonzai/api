@@ -6,22 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using TrafikApi.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using Microsoft.AspNetCore.Cors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TrafikApi.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [EnableCors("CorsAllowAllFix")]
     public class WriterController : Controller
     {
         Mongo conn = new Mongo();
         // POST api/values
         [HttpGet]
         [ActionName("InsertStation")]
-        public void InsertStation(string name, int areacode)
+        public void InsertStation(int areacode, string name, DateTime installed, string equipmentType, double latitude, double longitude)
         {
             IMongoCollection<Station> collection = conn.ConnectToStation("Trafik_DB", "Stations");
-            collection.InsertOne(new Station(name, areacode));
+            collection.InsertOne(new Station(areacode, name, installed, equipmentType, latitude, longitude));
         }
         // POST api/values
         [HttpPost]
